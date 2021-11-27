@@ -34,8 +34,8 @@ from footer import genFooterReport
 # ========================================
 
 
-sec = StandardEncryption('1234','12345',canPrint=0)  #lock with user password
-pdf = Canvas('report.pdf',pagesize=A4,encrypt = sec)
+# sec = StandardEncryption('1234','12345',canPrint=0)  #lock with user password
+pdf = Canvas('report.pdf',pagesize=A4)  #encrypt = sec
 pdf.setTitle('MyReport')
 
 def pdfReportGen(pdf,size):

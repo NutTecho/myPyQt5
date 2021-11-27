@@ -1,10 +1,13 @@
 import sys
-from PyQt5.QtWidgets import QApplication , QWidget ,QMessageBox
-from PyQt5 import uic,QtWidgets
-from PyQt5.QtCore import Qt
+import os
+from PyQt5 import QAxContainer,QtCore
+from PyQt5.QtWidgets import QApplication,QTextEdit,QWidget,QMessageBox,QMainWindow,QLineEdit,QVBoxLayout
+from PyQt5 import uic,QtWidgets,QtWebEngineWidgets
+# from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtCore import Qt,QUrl
 from datetime import datetime
-# import pandas as pd
-# import pyodbc
+import pymssql
+import os
 
 class AppDemo(QWidget):
     def __init__(self):
@@ -82,12 +85,72 @@ class AppDemo(QWidget):
     def countdata(self,value):
         print(value)
 
-       
+
+class GetDB():
+    def __init__(self,server,user,password,database,*args, **kwargs):
+        super(GetDB, self).__init__(*args, **kwargs)
+        self.conn =  pymssql.connect(server,user,password,database)
+        self.cursor = self.conn.cursor()
+        
+        
+    def selectdata(self):
+        listdata = []
+        self.cursor.execute('SELECT * FROM dbo.xx')
+        # print(self.cursor.fetchall())
+        for row in self.cursor:
+            listdata.append(row)
+          
+
+        return listdata
+
+class PDFtest(QMainWindow):
+    def __init__(self):
+        super(PDFtest, self).__init__()
+        PDFJS = r'D:\VSCODE\myPyQt5\pdfjs\web\viewer.html'
+        # PDFJS = 'file:///usr/share/pdf.js/web/viewer.html'
+        PDF = r'D:\VSCODE\myPyQt5\pdftable.pdf'
+
+        # PDFJS2 = f"file://{os.path.abspath('./web/viewer.html')}"
+        # print(PDFJS2)
+        # PDF2 = f'file://{"%20".join(sys.argv[1:])}'
+        # print("loading PDF:", PDF2)
+        self.input1 = QLineEdit()
+        self.browser = QtWebEngineWidgets.QWebEngineView()
+
+        settings = self.browser.settings()
+        settings.setAttribute(QtWebEngineWidgets.QWebEngineSettings.PluginsEnabled, True)
+
+  
+        full_url = QUrl.fromUserInput(PDFJS).toString() + '?file=' + QUrl.fromUserInput(PDF).toString()
+  
+        self.browser.load(QUrl.fromUserInput(full_url)) 
+        print(QUrl.fromUserInput(full_url)) 
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.input1)
+        self.layout.addWidget(self.browser)
+
+        self.container = QWidget()
+        self.container.setLayout(self.layout)
+
+        self.setCentralWidget(self.container)
+
+        # self.show()
+        # self.load(QUrl("www.google.com"))
+     
 
 if __name__ == '__main__':
+    # print(
+    #     f"PyQt5 version: {QtCore.PYQT_VERSION_STR}, Qt version: {QtCore.QT_VERSION_STR}"
+    # )
     app = QApplication(sys.argv)
-    demo = AppDemo()
+    demo = PDFtest()
+    # demo.setGeometry(600, 50, 800, 600)
+    # demo = AppDemo()
     demo.show()
+    # v = qpageview.View()
+    # v.show()
+    # v.loadPdf(r"D:\VSCODE\myPyQt5\report.pdf")
 
 
     try:
