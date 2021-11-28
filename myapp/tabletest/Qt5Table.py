@@ -1,3 +1,5 @@
+import resources
+import textwrap
 from PyQt5 import QtCore, QtGui, uic 
 from PyQt5.QtWidgets import QApplication, QListView, QMainWindow, QTableView, QVBoxLayout, QWidget, QTabWidget
 from PyQt5.QtGui import QColor,QIcon
@@ -5,6 +7,8 @@ from PyQt5.QtCore import QVariant, Qt,QAbstractListModel,QAbstractTableModel , Q
 import sys
 from datetime import datetime
 import pymssql
+
+# ===== use pyrcc5 resources.qrc -o resources.py  to create qrc file=====
 
 class DataModel(QAbstractTableModel):
     def __init__(self, item,header,parent = None,*args,**kwargs):
@@ -46,11 +50,14 @@ class DataModel(QAbstractTableModel):
             # value = self.listitem[index.row()][index.column()]
             if isinstance(value,int) and value > 10:
                 if value:
-                    return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\tick.png')
-            return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\cross.png')
+                    # return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\tick.png')
+                    return QtGui.QIcon(":/icons/tick.png")
+            # return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\cross.png')
+            return QtGui.QIcon(":/icons/cross.png")
 
             if isinstance(value, datetime):
-                return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\calendar.png')
+                # return QtGui.QIcon(r'D:\VSCODE\myPyQt5\myapp\tabletest\calendar.png')
+                return QtGui.QIcon(":/icons/calendar.png")
 
 
     def rowCount(self, index):
@@ -72,35 +79,41 @@ class DataModel(QAbstractTableModel):
             return QVariant()
 
 
-
-
 class GetDB():
-    def __init__(self,server,user,password,database,*args, **kwargs):
+    def __init__(self,*args, **kwargs):
         super(GetDB, self).__init__(*args, **kwargs)
-        self.conn =  pymssql.connect(server,user,password,database)
-        self.cursor = self.conn.cursor()
+        # self.conn =  pymssql.connect(server,user,password,database)
+        # self.cursor = self.conn.cursor(as_dict = False)
         
-        
-    def selectdata(self):
-        self.cursor.execute('SELECT * FROM dbo.xx')
-        # print(self.cursor.fetchall())
-        return  self.cursor.fetchall()
+      
+    def selectdata(self,server,user,password,database):
+        listdata = []
+        with pymssql.connect(server,user,password,database) as conn:
+            with conn.cursor(as_dict=False) as cursor:
+                cursor.execute('SELECT * FROM dbo.xx')
+                listdata.append( list(col[0] for col in cursor.description))
+                print(listdata)
+                for row in cursor:
+                    listdata.append(row)
+                    # print(row)
+                # print(self.cursor.fetchall())
+                # return  self.cursor.fetchall()
+        return listdata
 
-            
+           
 
 UiMain,QtBaseClass = uic.loadUiType(r'D:\VSCODE\myPyQt5\myapp\tabletest\tabletest.ui')
 
 
 class MainWindow(QMainWindow,UiMain):
-
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         UiMain.__init__(self)
         self.setupUi(self)
 
-        self.db = GetDB("localhost","client1","admin","test")
-        self.data = self.db.selectdata()
-        print(self.data)
+        self.db = GetDB()
+        self.data = self.db.selectdata("localhost","client1","admin","test")
+        # print(self.data)
         # self.model = DataModel(item = [[1,2,3],[4,5,6],[7,8,9]])
 
         # data = [
@@ -111,9 +124,12 @@ class MainWindow(QMainWindow,UiMain):
         # [datetime(2019, 5, 4), 8, 9],
         # ]
 
-        header = ["id","fname","lname","age","toy","money"]
+        # header = ["id","fname","lname","age","toy","money"]
 
-        self.model2 = DataModel(item = self.data,header = header)
+        # header = self.db.getheader()
+        # print(header)
+       
+        self.model2 = DataModel(item = self.data[1:],header = self.data[0])
         # self.listView.setModel(self.model)
         self.tableView.setModel(self.model2)
 

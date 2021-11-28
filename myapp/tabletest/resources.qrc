@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="icons">
+        <file alias="tick.png">tick.png</file>
+        <file alias="cross.png">cross.png</file>
+        <file alias="calendar.png">calendar.png</file>
+    </qresource>
+</RCC>
