@@ -1,5 +1,6 @@
 import os
 import time
+import textwrap
 import pymssql
 from reportlab.lib.enums import TA_JUSTIFY,TA_CENTER,TA_LEFT,TA_RIGHT
 from reportlab.lib import colors
@@ -18,12 +19,10 @@ def GetDB(server,user,password,database):
     listdata = []
     with pymssql.connect(server,user,password,database) as conn:
         with conn.cursor(as_dict = False) as cursor:
-            cursor.execute('SELECT * FROM dbo.Customers')
+            cursor.execute('SELECT CustomerID, CompanyName, ContactName, ContactTitle, Address,City,Country FROM dbo.Customers')
             listdata.append(col[0] for col in cursor.description)
             for row in cursor:
                 listdata.append(row)
-                # print(row)
-
     return listdata
 
 
@@ -38,9 +37,6 @@ def ReportGen(pdf,size):
     #     ("Bill",13,"Ball",250)
     # ]
 
-    data = GetDB("localhost","client1","admin","Northwind")
-    # print(data)
-
     width,height = A4
     widthtList = [
         width * 20 /100,
@@ -49,8 +45,14 @@ def ReportGen(pdf,size):
         width * 20/100,
         ]
 
-    styles=getSampleStyleSheet()
-    # styleN = styles["BodyText"]
+    styles = getSampleStyleSheet()
+    styleN = styles["BodyText"]
+    # styleN.wordWrap = 'CJK'
+    styleN.wordWrap = 'LTR'
+
+    data = GetDB("localhost","client1","admin","Northwind")
+    data2 = [[Paragraph(cell, styleN) for cell in row] for row in data]
+    # print(list(data[0]))
 
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
     ptext = '%s' % time.ctime()
@@ -58,21 +60,21 @@ def ReportGen(pdf,size):
     elems.append(Paragraph(ptext, styles["Normal"]))
     elems.append(Spacer(1, 12))
 
-    table = Table(data,colWidths=50,repeatRows=1,hAlign=TA_CENTER,vAlign=TA_CENTER)
+    table = Table(data2,repeatRows=1,hAlign=True,vAlign=True)
 
     style = TableStyle([
         ('BACKGROUND',(0,0),(-1,0),colors.green),
-        ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
-        ('ALIGN',(0,0),(-1,-1),'CENTER'),
+        ('TEXTCOLOR',(0,0),(-1,0),colors.white),
+        # ('ALIGN',(0,0),(-1,-1),'CENTER'),
         ('FONTNAME',(0,0),(-1,0),'Courier-Bold'),
         ('FONTSIZE',(0,0),(-1,0),12),
 
-        ('BOTTOMPADDING',(0,0),(-1,0),12),
+        # ('BOTTOMPADDING',(0,0),(-1,0),12),
         ('BACKGROUND',(0,1),(-1,-1),colors.beige),
-        ('BOX',(0,0),(-1,0),2,colors.black),
+        # ('BOX',(0,0),(-1,0),2,colors.black),
         ('GRID',(0,0),(-1,-1),1,colors.black),
-        ('ALIGN',(0,0),(-1,0),'CENTER'),
-        # ('VALIGN',(0,0),(-1,0),'CENTER'),
+        ('ALIGN',(0,0),(-1,-1),'CENTER'),
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
     ])
     table.setStyle(style)
 
@@ -86,7 +88,7 @@ def ReportGen(pdf,size):
 
     #     tx = TableStyle([('BACKGROUND',(0,i),(-1,i),bc)])
     #     table.setStyle(tx)
-
+   
     elems.append(table)
 
     pdf.build(elems)
