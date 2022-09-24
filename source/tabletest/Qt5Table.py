@@ -1,9 +1,9 @@
-import resources
+from resources import *
 import textwrap
 from PyQt5 import QtCore, QtGui, uic 
 from PyQt5.QtWidgets import QApplication, QListView, QMainWindow, QTableView, QVBoxLayout, QWidget, QTabWidget
 from PyQt5.QtGui import QColor,QIcon
-from PyQt5.QtCore import QVariant, Qt,QAbstractListModel,QAbstractTableModel , QObject, QRunnable, QThreadPool, QTimer, Qt,QTimer, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QVariant, Qt,QAbstractListModel,QAbstractTableModel , QModelIndex, QRunnable, QThreadPool, QTimer, Qt,QTimer, pyqtSignal, pyqtSlot
 import sys
 from datetime import datetime
 import pymssql
@@ -132,6 +132,13 @@ class MainWindow(QMainWindow,UiMain):
         self.model2 = DataModel(item = self.data[1:],header = self.data[0])
         # self.listView.setModel(self.model)
         self.tableView.setModel(self.model2)
+        self.tableView.clicked.connect(self.getindex)
+        # self.tableView.selectionModel.selectionChanged.connect(self.getindex)
+
+    def getindex(self,selected):
+        print(selected.row())
+        print(selected.data())
+
 
 def main():
     app = QApplication(sys.argv)

@@ -115,7 +115,7 @@ class Generator(QRunnable):
 
 
 class DataModel(QAbstractListModel):
-    def __init__(self, *args , item = None,**kwargs) -> None:
+    def __init__(self, *args , item = None,**kwargs):
         super(DataModel,self).__init__(*args,**kwargs)
         self.listitem = [] or item
 
@@ -147,11 +147,11 @@ class MainWindow(QMainWindow):
         self.y1 = [randint(0,100) for _ in range(100)]
         self.y2 = [randint(0,100) for _ in range(100)]
 
-        data = []
-        self.model = DataModel(data)
+        # data = []
+        # self.model = DataModel(data)
 
         self.table = QTableView()
-        self.table.setModel(self.model)
+        # self.table.setModel(self.model)
         #Load the UI Page
         # self.MplWidget(self,width=5,height=4,dpi=100)
         # self.addToolBar(NavigationToolbar(self.MplWidget.canvas ,self))
