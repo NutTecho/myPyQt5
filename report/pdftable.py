@@ -10,7 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 
-filename =  os.path.join('.\\pdftable.pdf')
+filename =  os.path.join('.\\report\\pdftable.pdf')
 pdf = SimpleDocTemplate(filename,pagesize=A4,
                         rightMargin=25,leftMargin=25,
                         topMargin=25,bottomMargin=25)

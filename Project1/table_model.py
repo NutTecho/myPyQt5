@@ -3,8 +3,8 @@ from PyQt5.QtGui import QColor,QIcon,QPixmap,QImage
 from datetime import datetime
 import os
 
-tick_path = os.path.join(os.getcwd(),"Project1","image","tick.png")
-cross_path = os.path.join(os.getcwd(),"Project1","image","cross.png")
+tick_path = os.path.join('.\\Project1\\image\\tick.png')
+cross_path = os.path.join('.\\Project1\\image\\cross.png')
 tick = QImage(tick_path)
 cross = QImage(cross_path)
 green = QColor('green')

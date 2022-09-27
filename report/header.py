@@ -8,11 +8,11 @@ def genHeaderReport(width,height):
         width * 45 /100,   #col2 right image
     ]
 
-    leftImagePath = r'D:\VSCODE\myPyQt5\myapp\report\a1.jpg'
+    leftImagePath = '.\\report\\a1.jpg'
     leftImageWidth = widthList[0]
     leftImage = Image(leftImagePath,leftImageWidth,height)
 
-    rightImagePath = r'D:\VSCODE\myPyQt5\myapp\report\a2.jpg'
+    rightImagePath = '.\\report\\a2.jpg'
     rightImageWidth = widthList[1]
     rightImage = Image(rightImagePath,rightImageWidth,height)
 

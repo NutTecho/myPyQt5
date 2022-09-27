@@ -102,7 +102,7 @@ class GetDB():
         return listdata
 
            
-file_path = os.path.join(os.getcwd(),"tabletest","tabletest.ui")
+file_path = os.path.join('.\\tabletest\\tabletest.ui')
 print(file_path)
 UiMain,QtBaseClass = uic.loadUiType(file_path)
 
