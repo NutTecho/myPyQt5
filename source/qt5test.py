@@ -12,7 +12,7 @@ import os
 class AppDemo(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('D:\VSCODE\myPyQt5\myapp\qt5demo.ui',self)
+        uic.loadUi('D:\VSCODE\myPyQt5\source\qt5demo.ui',self)
         self.setWindowTitle('Qt5Demotest')
         self.pushButton.clicked.connect(self.printdata)
         self.comboBox.addItem('c')
@@ -64,7 +64,7 @@ class AppDemo(QWidget):
                 Server=127.0.0.1;
                 Database = test;
                 UID = client1;
-                PWD = nutert0405;
+                PWD = admin;
                 """
         sql = """ SELECT * FROM test.dbo.xx	"""
         # try:
@@ -144,9 +144,9 @@ if __name__ == '__main__':
     #     f"PyQt5 version: {QtCore.PYQT_VERSION_STR}, Qt version: {QtCore.QT_VERSION_STR}"
     # )
     app = QApplication(sys.argv)
-    demo = PDFtest()
+    # demo = PDFtest()
     # demo.setGeometry(600, 50, 800, 600)
-    # demo = AppDemo()
+    demo = AppDemo()
     demo.show()
     # v = qpageview.View()
     # v.show()

@@ -121,7 +121,7 @@ class DataModel(QAbstractListModel):
 
     def data(self,index,role):
         if role == Qt.DisplayRole:
-            _,text = self.listitem[index.row()]
+            status,text = self.listitem[index.row()]
             return text
         
         if role == Qt.DecorationRole:
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        uic.loadUi('D:\VSCODE\myPyQt5\myapp\exam1.ui', self)
+        uic.loadUi('D:\VSCODE\myPyQt5\source\exam1.ui', self)
         self.threadpool = QThreadPool()
         self.x = list(range(100))
         self.y1 = [randint(0,100) for _ in range(100)]

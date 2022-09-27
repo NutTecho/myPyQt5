@@ -1,5 +1,3 @@
-from resources import *
-import textwrap
 from PyQt5 import QtCore, QtGui, uic 
 from PyQt5.QtWidgets import QApplication, QListView, QMainWindow, QTableView, QVBoxLayout, QWidget, QTabWidget
 from PyQt5.QtGui import QColor,QIcon
@@ -7,7 +5,7 @@ from PyQt5.QtCore import QVariant, Qt,QAbstractListModel,QAbstractTableModel , Q
 import sys
 from datetime import datetime
 import pymssql
-
+import os
 # ===== use pyrcc5 resources.qrc -o resources.py  to create qrc file=====
 
 class DataModel(QAbstractTableModel):
@@ -30,7 +28,7 @@ class DataModel(QAbstractTableModel):
             if isinstance(value, datetime):
                 return value.strftime("%Y-%m-%d")
 
-            return value
+            return str(value)
             
         if role == Qt.ForegroundRole:
             if (
@@ -44,7 +42,10 @@ class DataModel(QAbstractTableModel):
         #         value = int(value)
         #         return QColor('#053061')
 
-
+        #  ========================================================
+        # use command to convert resurce.qrc file to .py
+        # pyrcc5 resources.qrc -o resources.py
+        # ========================================================
 
         if role == Qt.DecorationRole:
             # value = self.listitem[index.row()][index.column()]
@@ -101,8 +102,9 @@ class GetDB():
         return listdata
 
            
-
-UiMain,QtBaseClass = uic.loadUiType(r'D:\VSCODE\myPyQt5\myapp\tabletest\tabletest.ui')
+file_path = os.path.join(os.getcwd(),"tabletest","tabletest.ui")
+print(file_path)
+UiMain,QtBaseClass = uic.loadUiType(file_path)
 
 
 class MainWindow(QMainWindow,UiMain):

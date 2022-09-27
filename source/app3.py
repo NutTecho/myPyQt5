@@ -242,13 +242,13 @@ class GenPDF(QRunnable):
 class DemoDialog(QDialog):
     def __init__(self):
         super(DemoDialog,self).__init__()
-        uic.loadUi('D:\VSCODE\myPyQt5\myapp\dai.ui', self)
+        uic.loadUi('D:\VSCODE\myPyQt5\source\dai.ui', self)
 
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        uic.loadUi('D:\VSCODE\myPyQt5\myapp\genreport.ui', self)
+        uic.loadUi('D:\VSCODE\myPyQt5\source\genreport.ui', self)
         # self.browser = QtWebEngineWidgets.QWebEngineView()
 
         # self.settings = self.browser.settings()
